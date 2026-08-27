@@ -40,12 +40,12 @@
                     <label for="range1" class="form-label pb-0" data-like-target="output" data-label="{{ 'ui.likes'|trans }}">{{ 'ui.likes'|trans }} {{ like_rate }}</label>
                 </div>
                 <input type="range" min="0" max="10" step="0.1" value="{{like_rate}}" class="form-range" id="range1"
-                    data-like-target="slider" data-action="input->like#update">
+                    data-like-target="slider" data-action="change->like#update">
             </div>
             <div class="" style="width: 8rem;">
                 <div class="form-floating" data-controller="review">
                     <input min="0" max="10" step="0.1" value="{{review_rate}}" type="number" class="form-control"
-                        id="review" data-review-target="number" data-action="input->review#update">
+                        id="review" data-review-target="number" data-action="change->review#update">
                     <label for="review">{{ 'ui.review'|trans }}</label>
                 </div>
             </div>
