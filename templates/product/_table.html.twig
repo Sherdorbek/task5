@@ -24,11 +24,26 @@
             <tr>
                 <td colspan="5" class="p-0 border-0">
                     <div id="row{{ movie.index }}" class="collapse" data-bs-parent="#tableAccordion">
+                        <div id="trailer-1 position-relative">
+                            <video id="video-{{movie.index}}" src="{{asset('videos/1.mp4')}}" muted playsinline
+                                style="display:none"></video>
+                            <canvas id="canvas-{{movie.index}}" width="640" height="360"></canvas>
+                            <button class="btn btn-primary" id="play-btn-{{movie.index}}"
+                                onclick="play({{movie.index}})">▶ Play</button>
+                            <button class="btn btn-primary" id="pause-btn-{{movie.index}}" style="display: none;"
+                                onclick="pause({{movie.index}})">⏸ Pause</button>
+                        </div>
                         <div class="p-3 bg-light">
-                            Hidden details for row {{ movie.index }} go here.
+                            {{ movie.description }}
+                            <i>Video1: {{movie.trailer.video1}}</i>
+                            <b>Video2 :{{movie.trailer.video2}}</b>
+                            <i>Intro: {{movie.trailer.intro}}</i>
+                            <b>Outro: {{movie.trailer.outro}}</b>
+                            <i>Color effect: {{movie.trailer.colorEffect}}</i>
+                            <b>Zoom: {{movie.trailer.zoom}}</b>
                             <p>{{ movie.director }}</p>
-                            <p>{{ movie.reviews[0] }}</p>
-                            <p>{{ movie.likes }}</p>
+                            <p id="review-{{(movie.index-1)%15}}">-</p>
+                            <p id="like-{{movie.index-1}}">0</p>
                         </div>
                     </div>
                 </td>

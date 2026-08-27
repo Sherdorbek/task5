@@ -1,1 +1,20 @@
-Soon...
+<turbo-frame id="my-frame" refresh="morph">
+    <div class="d-flex flex-row flex-wrap pt-4 justify-content-center" id="product-list">
+        {% for movie in movies %}
+        <div class="card m-2" style="width: 20rem;">
+            <img src="{{asset('images/placeholder.png')}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{movie.title}}</h5>
+                <p class="card-text">{{movie.year}}</p>
+                <a href="#" class="btn btn-primary">More</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <center>
+        <form data-turbo-frame="my-frame" method="get" action="{{path('product_list')}}">
+            <input value="{{page+1}}" name="page" type="hidden">
+            <button type="submit" class="btn btn-primary">Load more</button>
+        </form>
+    </center>
+</turbo-frame>

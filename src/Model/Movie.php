@@ -12,9 +12,8 @@ class Movie
         private string $director,
         private int $year,
         private string $genre,
-        private string $trailer,
-        private array $reviews,
-        private int $likes,
+        private Trailer $trailer,
+        private string $description,
     ) {}
 
 
@@ -42,16 +41,12 @@ class Movie
     {
         return $this->genre;
     }
-    public function getTrailer(): string
+    public function getTrailer(): Trailer
     {
         return $this->trailer;
     }
-    public function getReviews(): array
+    public function getDescription(): string
     {
-        return $this->reviews;
-    }
-    public function getLikes(): int
-    {
-        return $this->likes;
+        return $this->description;
     }
 }

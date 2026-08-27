@@ -17,25 +17,31 @@ final class ProductController extends AbstractController
     {
         $seed = $request->getSession()->get('seed') ?? '12345678';
         $view = $request->getSession()->get('view', 'table');
-        $pageFrom = max(1,$request->query->getInt('page') ?? 1);
+        $pageFrom = max(1, $request->query->getInt('page') ?? 1);
 
         if ($seed !== '12345678')
             $request->getSession()->set('seed', $seed);
 
-        $all = $generator->generate($seed,$pageFrom);
-
+        $all = $generator->generate($seed, $pageFrom);
+        if ($view === 'table'){
         $movies = $paginator->paginate(
             $all,
             $pageFrom,
             15 // items per page
-        );
+        );}
+        else{
+            $movies=$all;
+        }
 
         return $this->render('product/index.html.twig', [
             'movies' => $movies,
             'seed' => $seed,
-            'view' => $view
+            'view' => $view,
+            'page'=> $pageFrom
         ]);
     }
+
+
     #[Route('/products/change/seed', name: 'product_seed', methods: ['POST'])]
     public function update_seed(Request $request): Response
     {

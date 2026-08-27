@@ -19,26 +19,27 @@
                 <form method="POST" action="{{path('product_seed')}}">
                     <div class="input-group mb-3">
                         <div class="form-floating">
-                            <input name="seed" id="seed" type="text" class="form-control" aria-label="seed"
+                            <input name="seed" id="seed" type="text" class="form-control w-full" aria-label="seed"
                                 value="{{seed}}">
                             <label for="seed">Seed</label>
                         </div>
                         <span class="input-group-text">
-                            <button type="submit" class="btn bg-transparent">Shuffle</button>
+                            <button type="submit" class="btn bg-transparent"><i class="bi bi-shuffle"></i></button>
                         </span>
                     </div>
                 </form>
             </div>
             <div class="col position-relative" data-controller="like">
                 <div class="d-flex justify-content-start">
-                    <label for="range1" class="form-label mb-0" data-like-target="output">Likes </label>
+                    <label for="range1" class="form-label pb-0" data-like-target="output">Likes </label>
                 </div>
                 <input type="range" min="0" max="10" step="0.1" class="form-range" id="range1" data-like-target="slider"
                     data-action="input->like#update">
             </div>
             <div class="col">
-                <div class="form-floating">
-                    <input type="number" class="form-control" id="review">
+                <div class="form-floating" data-controller="review">
+                    <input min="0" max="10" step="0.1" type="number" class="form-control" id="review"
+                        data-review-target="number" data-action="input->review#update">
                     <label for="review">Review</label>
                 </div>
             </div>
@@ -62,7 +63,9 @@
 {% if view == 'table' %}
 {{ include('product/_table.html.twig') }}
 {% else %}
-{{ include('product/_grid.html.twig') }}
+<div id="products-list" {{ stimulus_controller('infinite-scroll') }}>
+    {{ include('product/_grid.html.twig') }}
+</div>
 {% endif %}
 
 
