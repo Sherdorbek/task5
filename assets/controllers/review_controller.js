@@ -17,10 +17,9 @@ export default class extends Controller {
 
     getPage() {
         const inp = document.querySelector('form[data-turbo-frame="my-frame"] input[name="page"]');
-        if (inp?.value) return Math.max(1, parseInt(inp.value, 10));
+        if (inp?.value) return Math.max(1, inp.value - 1);
         const count = document.querySelectorAll('#product-list .card').length;
-        if (count) return Math.max(1, Math.ceil(count / 15));
-        return Math.max(1, parseInt(new URLSearchParams(location.search).get('page'), 10) || 1);
+        return count ? Math.ceil(count / 15) : (new URLSearchParams(location.search).get('page') || 1);
     }
 
     async update() {
