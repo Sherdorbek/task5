@@ -1,0 +1,52 @@
+<div {% if view|default('table')=='table' %}id="row{{ movie.index }}" class="collapse" data-bs-parent="#tableAccordion"
+    {% endif %}>
+    {% set audioNum = ((movie.trailer.outro % 6) == 0 ? 1 : (movie.trailer.outro % 6)) %}
+    <div class="p-2 d-flex flex-column flex-lg-row">
+        <div id="trailer-{{ movie.index }}"
+            class="trailer-container justify-content-center d-flex position-relative flex-shrink-0"
+            data-intro="{{ movie.title }}" data-outro="{{ movie.trailer.outro }}"
+            data-color-effect="{{ movie.trailer.colorEffect }}" data-zoom="{{ movie.trailer.zoom }}"
+            data-title="{{ movie.title }}">
+            <audio id="audio-{{ movie.index }}" src="{{ asset('audios/' ~ audioNum ~ '.mp3') }}" preload="none"></audio>
+            <video id="video-{{ movie.index }}" src="{{ asset('videos/' ~ movie.trailer.video1 ~ '.mp4') }}" muted
+                playsinline preload="none" style="display:none"></video>
+            <video id="video2-{{ movie.index }}" src="{{ asset('videos/' ~ movie.trailer.video2 ~ '.mp4') }}" muted
+                playsinline preload="none" style="display:none"></video>
+            <div class="canvas-wrapper position-relative">
+                <canvas id="canvas-{{ movie.index }}" width="640" height="360"></canvas>
+                <button class="trailer-play-btn" id="play-btn-{{ movie.index }}" onclick="play({{ movie.index }})"
+                    title="{{ 'ui.play_trailer'|trans }}" aria-label="{{ 'ui.play'|trans }}">
+                    <i class="bi bi-play-fill" style="margin-left: 3px;"></i>
+                </button>
+                <button class="trailer-play-btn" id="pause-btn-{{ movie.index }}" style="display: none;"
+                    onclick="pause({{ movie.index }})" title="{{ 'ui.pause_trailer'|trans }}" aria-label="{{ 'ui.pause'|trans }}">
+                    <i class="bi bi-pause-fill"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-3 flex-grow-1">
+            <p>
+            <h3 class="mb-0">{{movie.title}}</h3>
+            </p>
+            <div class="bg-primary text-light rounded mb-2" style="width: 60px;">
+                <i class="bi mx-2 bi-hand-thumbs-up-fill"></i>
+                {% if view|default('table') == "table" %}
+                <span id="like-{{ (movie.index-1)%15 }}">0</span>
+                {% else %}
+                <span id="like-{{ movie.index - 1 }}">0</span>
+                {% endif %}
+
+            </div>
+            <p><b>{{ 'ui.director'|trans }} : </b>{{ movie.director }}</p>
+            <p><b>{{ 'ui.actors'|trans }} : </b>{{ movie.actors }}</p>
+            <p>{{ movie.description }}
+            <p>
+            <p><b><i>{{ 'ui.reviews'|trans }}</i></b></p>
+            {% if view|default('table') == "table" %}
+            <p id="review-{{ (movie.index-1)%15 }}">-</p>
+            {% else %}
+            <p id="review-{{ movie.index - 1 }}">-</p>
+            {% endif %}
+        </div>
+    </div>
+</div>

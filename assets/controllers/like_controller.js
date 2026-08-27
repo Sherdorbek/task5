@@ -1,26 +1,38 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ["slider", "output"]
+    static targets = ["slider", "output"];
+
+    connect() {
+        this.update();
+        this.fn = () => this.update();
+        document.addEventListener('turbo:frame-render', this.fn);
+        document.addEventListener('turbo:render', this.fn);
+    }
+
+    disconnect() {
+        document.removeEventListener('turbo:frame-render', this.fn);
+        document.removeEventListener('turbo:render', this.fn);
+    }
+
+    getPage() {
+        const inp = document.querySelector('form[data-turbo-frame="my-frame"] input[name="page"]');
+        if (inp?.value) return Math.max(1, inp.value - 1);
+        const count = document.querySelectorAll('#product-list .card').length;
+        return count ? Math.ceil(count / 15) : (new URLSearchParams(location.search).get('page') || 1);
+    }
 
     async update() {
-        this.outputTarget.textContent = "Likes  "+this.sliderTarget.value
-
-        const currParams = new URLSearchParams(window.location.search);
-        const page = currParams.get('page') || 1;
-        const url = '/api/like/'+page+'?range='+this.sliderTarget.value;
-
-        const response = await fetch(url, {
-            headers: { "Accept": "application/json" }
-        });
-
-        const data = await response.json();
-
-        data.forEach((value, index) => {
-            const el = document.getElementById(`like-${index}`);
-            if (el) {
-                el.textContent = value;
-            }
+        const val = this.sliderTarget.value;
+        const label = this.outputTarget.dataset.label || 'Likes';
+        this.outputTarget.textContent = `${label} ${val}`;
+        const res = await fetch(`/api/like/${this.getPage()}?range=${val}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        data.forEach((v, i) => {
+            const el = document.getElementById(`like-${i}`);
+            if (el) el.textContent = v;
+            document.querySelectorAll(`[data-like-idx="${i}"], .like-val-${i}`).forEach(c => c.textContent = v);
         });
     }
 }

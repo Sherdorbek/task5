@@ -4,16 +4,19 @@ namespace App\Services;
 
 use App\Model\Movie;
 use App\Model\Trailer;
+use App\Services\TitleFaker;
+use App\Services\Genre;
 
 class MovieGenerator
 {
 
-    public function generate(string $seed, int $pageNumber)
+    public function generate(string $seed, int $pageNumber,string $locale)
     {
 
-        $faker = \Faker\Factory::create('en_US');
-        $faker->addProvider(new \Faker\Provider\TitleFaker($faker));
+        $faker = \Faker\Factory::create($locale);
+        $faker->addProvider(new TitleFaker($faker,$locale));
         $faker->seed($seed);
+
 
         $movies = [];
 
@@ -22,10 +25,10 @@ class MovieGenerator
 
                 $i,
                 $faker->title(),
-                [$faker->name()],
+                $faker->name().', '.$faker->name().', '.$faker->name(),
                 $faker->name(),
                 $faker->numberBetween(2020, 2026),
-                $faker->words(1, true),
+                Genre::get($locale,$faker->numberBetween(0,12)),
                 new Trailer(
                     strval($faker->numberBetween(1, 5)),
                     strval($faker->numberBetween(1, 5)),

@@ -8,7 +8,7 @@ class Movie
     public function __construct(
         private int $index,
         private string $title,
-        private array $actors,
+        private string $actors,
         private string $director,
         private int $year,
         private string $genre,
@@ -25,7 +25,7 @@ class Movie
     {
         return $this->title;
     }
-    public function getActors(): array
+    public function getActors(): string
     {
         return $this->actors;
     }

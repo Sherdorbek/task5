@@ -8,7 +8,7 @@ class LikeGenerator
     public function generate(string $seed, int $pageNumber,$range)
     {
 
-        $faker = \Faker\Factory::create('en_US');
+        $faker = \Faker\Factory::create();
         $faker->seed($seed . strval($pageNumber));
 
         $estimate = [];
@@ -25,7 +25,7 @@ class LikeGenerator
         }
 
         $likes = [];
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 15*$pageNumber+30; $i++) {
             array_push($likes,$faker->randomElement($estimate));
         }
 

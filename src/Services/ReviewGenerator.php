@@ -7,10 +7,10 @@ use App\Model\Review;
 class ReviewGenerator
 {
 
-    public function generate(string $seed, int $pageNumber, float $amount)
+    public function generate(string $seed, int $pageNumber, float $amount, string $locale)
     {
 
-        $faker = \Faker\Factory::create('en_US');
+        $faker = \Faker\Factory::create($locale);
         $faker->seed("$seed$pageNumber");
 
         $estimate = [];
@@ -27,7 +27,7 @@ class ReviewGenerator
         }
 
         $reviews = [];
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < $pageNumber * 15 + 30; $i++) {
             $review = [];
             for ($j = 1; $j <= $faker->randomElement($estimate); $j++) {
                 array_push($review, new Review(

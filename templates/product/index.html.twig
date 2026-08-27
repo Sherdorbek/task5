@@ -1,27 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}{{ 'ui.page_title'|trans }}{% endblock %}
 
 {% block body %}
 <div class="py-2" style="background-color: #e1e4e6">
     <div class="d-flex justify-content-around">
-        <div class="row align-items-center">
-            <div class="col">
+        <div class="row d-flex flex-row flex-wrap align-items-center">
+            <div class="" style="width: 10rem;">
                 <div class="form-floating">
-                    <select class="form-select" id="language" aria-label="Language">
-                        <option value="1" selected>English</option>
-                        <option value="2">Spain</option>
+                    <select class="form-select" id="language" aria-label="{{ 'ui.language'|trans }}"
+                        onchange="Turbo.visit('{{ path('product_locale') }}?locale=' + this.value)">
+                        {% if locale == "en_US" %}
+                        <option value="1" selected>{{ 'ui.english'|trans }}</option>
+                        <option value="2">{{ 'ui.spanish'|trans }}</option>
+                        {% else %}
+                        <option value="1">{{ 'ui.english'|trans }}</option>
+                        <option value="2" selected>{{ 'ui.spanish'|trans }}</option>
+                        {% endif %}
                     </select>
-                    <label for="language">Language</label>
+                    <label for="language">{{ 'ui.language'|trans }}</label>
                 </div>
             </div>
-            <div class="col pt-3">
+            <div class="pt-3" style="width: 14rem;">
                 <form method="POST" action="{{path('product_seed')}}">
                     <div class="input-group mb-3">
                         <div class="form-floating">
-                            <input name="seed" id="seed" type="text" class="form-control w-full" aria-label="seed"
+                            <input name="seed" id="seed" type="text" class="form-control w-full" aria-label="{{ 'ui.seed'|trans }}"
                                 value="{{seed}}">
-                            <label for="seed">Seed</label>
+                            <label for="seed">{{ 'ui.seed'|trans }}</label>
                         </div>
                         <span class="input-group-text">
                             <button type="submit" class="btn bg-transparent"><i class="bi bi-shuffle"></i></button>
@@ -29,18 +35,18 @@
                     </div>
                 </form>
             </div>
-            <div class="col position-relative" data-controller="like">
+            <div class="position-relative" data-controller="like" style="width: 12rem;">
                 <div class="d-flex justify-content-start">
-                    <label for="range1" class="form-label pb-0" data-like-target="output">Likes </label>
+                    <label for="range1" class="form-label pb-0" data-like-target="output" data-label="{{ 'ui.likes'|trans }}">{{ 'ui.likes'|trans }} {{ like_rate }}</label>
                 </div>
-                <input type="range" min="0" max="10" step="0.1" class="form-range" id="range1" data-like-target="slider"
-                    data-action="input->like#update">
+                <input type="range" min="0" max="10" step="0.1" value="{{like_rate}}" class="form-range" id="range1"
+                    data-like-target="slider" data-action="input->like#update">
             </div>
-            <div class="col">
+            <div class="" style="width: 8rem;">
                 <div class="form-floating" data-controller="review">
-                    <input min="0" max="10" step="0.1" type="number" class="form-control" id="review"
-                        data-review-target="number" data-action="input->review#update">
-                    <label for="review">Review</label>
+                    <input min="0" max="10" step="0.1" value="{{review_rate}}" type="number" class="form-control"
+                        id="review" data-review-target="number" data-action="input->review#update">
+                    <label for="review">{{ 'ui.review'|trans }}</label>
                 </div>
             </div>
         </div>
@@ -48,11 +54,15 @@
             <form method="post" action="{{path('product_view')}}">
                 <div class="btn-group" role="group">
                     {% if view == 'table' %}
-                    <button name="view" value="table" type="submit" class="btn btn-primary">Table</button>
-                    <button name="view" value="grid" type="submit" class="btn btn-outline-primary">Grid</button>
+                    <button name="view" value="table" type="submit" class="btn btn-primary" title="{{ 'ui.table_view'|trans }}" aria-label="{{ 'ui.table_view'|trans }}"><i
+                            class="bi bi-table"></i></button>
+                    <button name="view" value="grid" type="submit" class="btn btn-outline-primary" title="{{ 'ui.grid_view'|trans }}" aria-label="{{ 'ui.grid_view'|trans }}"><i
+                            class="bi bi-ui-checks-grid"></i></button>
                     {% else %}
-                    <button name="view" value="table" type="submit" class="btn btn-outline-primary">Table</button>
-                    <button name="view" value="grid" type="submit" class="btn btn-primary">Grid</button>
+                    <button name="view" value="table" type="submit" class="btn btn-outline-primary" title="{{ 'ui.table_view'|trans }}" aria-label="{{ 'ui.table_view'|trans }}"><i
+                            class="bi bi-table"></i></button>
+                    <button name="view" value="grid" type="submit" class="btn btn-primary" title="{{ 'ui.grid_view'|trans }}" aria-label="{{ 'ui.grid_view'|trans }}"><i
+                            class="bi bi-ui-checks-grid"></i></button>
                     {% endif %}
                 </div>
         </div>

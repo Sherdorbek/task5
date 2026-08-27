@@ -1,32 +1,50 @@
 <?php
-namespace Faker\Provider;
+
+
+namespace App\Services;
+
+use Faker\Generator;
 
 class TitleFaker extends \Faker\Provider\Base
 {
     protected static $nouns = [];
     protected static $adjs = [];
-    protected static $loaded = false;
+    protected static array $loadedLocales = [];
+    private string $locale;
 
-    protected static function loadWords()
+    public function __construct(Generator $generator, string $locale)
     {
-        if (static::$loaded) {
+        parent::__construct($generator);
+        $this->locale = $locale;
+    }
+
+    protected function loadWords(string $locale): void
+    {
+        if (isset(static::$loadedLocales[$locale])) {
             return;
         }
 
-        static::$nouns = file( __DIR__ . '/../words/nouns.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        static::$adjs = file(__DIR__ . '/../words/adjectives.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $nounsPath = __DIR__ . "/../words/{$locale}/nouns.txt";
+        $adjsPath  = __DIR__ . "/../words/{$locale}/adjectives.txt";
 
-        static::$loaded = true;
+        if (!file_exists($nounsPath) || !file_exists($adjsPath)) {
+            $nounsPath = __DIR__ . '/../words/en_US/nouns.txt';
+            $adjsPath  = __DIR__ . '/../words/en_US/adjectives.txt';
+        }
+
+        static::$nouns[$locale] = file($nounsPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        static::$adjs[$locale]  = file($adjsPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        static::$loadedLocales[$locale] = true;
     }
+
 
     public function title()
     {
-        static::loadWords();
+        $this->loadWords($this->locale);
 
-        $adj = static::randomElement(static::$adjs);
-        $noun = static::randomElement(static::$nouns);
+        $adj = static::randomElement(static::$adjs[$this->locale]);
+        $noun = static::randomElement(static::$nouns[$this->locale]);
 
-        return ucfirst($adj." ".$noun);
+        return ucfirst($adj . " " . $noun);
     }
-
 }

@@ -3,10 +3,10 @@
         <thead class="border-bottom border-dark">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Title</th>
-                <th scope="col">Cast</th>
-                <th scope="col">Year</th>
+                <th scope="col">{{ 'ui.genre'|trans }}</th>
+                <th scope="col">{{ 'ui.title'|trans }}</th>
+                <th scope="col">{{ 'ui.cast'|trans }}</th>
+                <th scope="col">{{ 'ui.year'|trans }}</th>
             </tr>
         </thead>
         <tbody class="accordion" id="tableAccordion">
@@ -18,34 +18,12 @@
                 </td>
                 <td>{{ movie.genre }}</td>
                 <td>{{ movie.title }}</td>
-                <td>{{ movie.actors[0] }}</td>
+                <td>{{ movie.actors }}</td>
                 <td>{{ movie.year }}</td>
             </tr>
             <tr>
                 <td colspan="5" class="p-0 border-0">
-                    <div id="row{{ movie.index }}" class="collapse" data-bs-parent="#tableAccordion">
-                        <div id="trailer-1 position-relative">
-                            <video id="video-{{movie.index}}" src="{{asset('videos/1.mp4')}}" muted playsinline
-                                style="display:none"></video>
-                            <canvas id="canvas-{{movie.index}}" width="640" height="360"></canvas>
-                            <button class="btn btn-primary" id="play-btn-{{movie.index}}"
-                                onclick="play({{movie.index}})">▶ Play</button>
-                            <button class="btn btn-primary" id="pause-btn-{{movie.index}}" style="display: none;"
-                                onclick="pause({{movie.index}})">⏸ Pause</button>
-                        </div>
-                        <div class="p-3 bg-light">
-                            {{ movie.description }}
-                            <i>Video1: {{movie.trailer.video1}}</i>
-                            <b>Video2 :{{movie.trailer.video2}}</b>
-                            <i>Intro: {{movie.trailer.intro}}</i>
-                            <b>Outro: {{movie.trailer.outro}}</b>
-                            <i>Color effect: {{movie.trailer.colorEffect}}</i>
-                            <b>Zoom: {{movie.trailer.zoom}}</b>
-                            <p>{{ movie.director }}</p>
-                            <p id="review-{{(movie.index-1)%15}}">-</p>
-                            <p id="like-{{movie.index-1}}">0</p>
-                        </div>
-                    </div>
+                    {{ include('product/_video.html.twig', {'movie': movie, 'view': 'table'}) }}
                 </td>
             </tr>
             {% endfor %}
@@ -54,6 +32,8 @@
 </div>
 
 
-<div class="d-flex justify-content-center">
-    {{ knp_pagination_render(movies, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
-</div>
+{% if view == 'table' %}
+    <div class="d-flex justify-content-center">
+        {{ knp_pagination_render(movies, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
+    </div>
+{% endif %}
