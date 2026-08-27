@@ -30,23 +30,14 @@
             </p>
             <div class="bg-primary text-light rounded mb-2" style="width: 60px;">
                 <i class="bi mx-2 bi-hand-thumbs-up-fill"></i>
-                {% if view|default('table') == "table" %}
-                <span id="like-{{ (movie.index-1)%15 }}">0</span>
-                {% else %}
                 <span id="like-{{ movie.index - 1 }}">0</span>
-                {% endif %}
-
             </div>
             <p><b>{{ 'ui.director'|trans }} : </b>{{ movie.director }}</p>
             <p><b>{{ 'ui.actors'|trans }} : </b>{{ movie.actors }}</p>
             <p>{{ movie.description }}
             <p>
             <p><b><i>{{ 'ui.reviews'|trans }}</i></b></p>
-            {% if view|default('table') == "table" %}
-            <p id="review-{{ (movie.index-1)%15 }}">-</p>
-            {% else %}
             <p id="review-{{ movie.index - 1 }}">-</p>
-            {% endif %}
         </div>
     </div>
 </div>

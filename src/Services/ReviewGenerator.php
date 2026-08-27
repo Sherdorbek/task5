@@ -9,36 +9,35 @@ class ReviewGenerator
 
     public function generate(string $seed, int $pageNumber, float $amount, string $locale)
     {
-
         $faker = \Faker\Factory::create($locale);
-        $faker->seed("$seed$pageNumber");
+        $faker->seed($seed);
 
         $estimate = [];
-        $amountInt = floor($amount);
+        $amountInt = (int) floor($amount);
         $amountFloat = 10 * ($amount - $amountInt);
 
         for ($i = 0; $i < 10; $i++) {
             if ($amountFloat >= 1) {
-                array_push($estimate, $amountInt + 1);
+                $estimate[] = $amountInt + 1;
                 $amountFloat--;
             } else {
-                array_push($estimate, $amountInt);
+                $estimate[] = $amountInt;
             }
         }
 
         $reviews = [];
-        for ($i = 0; $i < $pageNumber * 15 + 30; $i++) {
+        $total = max(30, ($pageNumber + 2) * 15);
+        for ($i = 0; $i < $total; $i++) {
             $review = [];
-            for ($j = 1; $j <= $faker->randomElement($estimate); $j++) {
-                array_push($review, new Review(
+            $count = ($amount <= 0) ? 0 : $faker->randomElement($estimate);
+            for ($j = 1; $j <= $count; $j++) {
+                $review[] = new Review(
                     $faker->name(),
                     $faker->realText(80, 2)
-                ));
+                );
             }
-            array_push($reviews, $review);
+            $reviews[] = $review;
         }
-
-
 
         return $reviews;
     }
